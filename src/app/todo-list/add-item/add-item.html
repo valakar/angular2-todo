@@ -1,0 +1,7 @@
+<div class="add-item">
+    <input type="text"
+           [(ngModel)]="itemName"
+           (keydown.enter)="add(itemName)"/>
+    <button (click)="add(itemName)"
+            [disabled]="!itemName">Add</button>
+</div>

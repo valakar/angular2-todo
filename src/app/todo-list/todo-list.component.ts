@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {TodoService, TodoItem} from './../services/todo.service';
 import {FilterEnum} from './filter-enum';
+import {AddItemComponent} from './add-item';
 
 @Component({
     selector: 'todo-list',
@@ -21,11 +22,7 @@ import {FilterEnum} from './filter-enum';
                 (click)="setFilter(FilterEnum.Undone)">Un-Done</button>
         </div>
         
-        <div class="add-item">
-            <input type="text" [(ngModel)]="itemName" (keydown.enter)="addItem()"/>
-            <button (click)="addItem()"
-                    [disabled]="!itemName">Add</button>
-        </div>
+        <add-item [itemName]="itemName" (addItem)="addItem($event)"></add-item>
         
         <div class="statistics">
             <span>items: {{getFilteredItems().length}}</span>
@@ -42,13 +39,14 @@ import {FilterEnum} from './filter-enum';
                 <button class="item-del" (click)="deleteItem(item)">X</button>
             </div>
         </div>
-    `
+    `,
+    directives: [AddItemComponent]
 })
 export class TodoList {
     items:TodoItem[] = [];
     filteredItems:TodoItem[];
     time:string;
-    itemName:string;
+    itemName:string = 'New Todo Item';
     filter:FilterEnum = FilterEnum.All;
     FilterEnum:any = FilterEnum;
 
@@ -60,11 +58,8 @@ export class TodoList {
         setInterval(() => this.time = new Date().getTime().toString(), 1000)
     }
 
-    addItem() {
-        if (this.itemName) {
-            this.items.push(new TodoItem(this.items.length, false, this.itemName, this.itemName, this.items.length * 10))
-            this.itemName = null;
-        }
+    addItem(item) {
+        this.items.push(new TodoItem(this.items.length, false, item, item, this.items.length * 10))
     }
 
     deleteItem(item:TodoItem) {
