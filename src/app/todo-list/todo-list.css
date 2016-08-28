@@ -1,0 +1,47 @@
+.clock {
+	border: 1px solid black;
+	margin-bottom: 10px;
+	width: 200px;
+}
+
+.add-item {
+	margin-bottom: 10px;
+}
+
+/*/////////////////*/
+.filters {
+	margin-bottom: 10px;
+}
+
+.filters button {
+	background: #aaaaaa;
+}
+
+.filters button.active {
+	background: #00b0e8;
+}
+
+.statistics {
+	font-style: italic;
+}
+
+/*/////////////////*/
+.item {
+	border: 1px solid #1c94c4;
+	border-radius: 5px;
+	padding: 5px;
+	margin-bottom: 10px;
+	display: flex;
+}
+
+.item-text {
+	flex: 1;
+}
+
+.item-del {
+	align-self: flex-end;
+}
+
+.done-item {
+	text-decoration: line-through;
+}

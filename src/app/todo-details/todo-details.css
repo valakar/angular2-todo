@@ -1,0 +1,9 @@
+.form-control {
+	margin-bottom: 10px;
+}
+
+textarea {
+	display: block;
+	height: 50px;
+	width: 400px;
+}

@@ -1,29 +1,89 @@
 import {Component} from '@angular/core';
+import {TodoService, TodoItem} from './../services/todo.service';
+import {FilterEnum} from './filter-enum';
 
 @Component({
     selector: 'todo-list',
-    styles: [`
-  
-    `],
+    styleUrls: [
+        './todo-list.css'
+    ],
     template: `
         <h1>Todo List</h1>
+        
+        <div class="clock">Clock: {{time}}</div>
+        
+        <div class="filters">
+            <button [ngClass]="{'active': filter == FilterEnum.All}"
+                (click)="setFilter(FilterEnum.All)">All</button>
+            <button [ngClass]="{'active': filter == FilterEnum.Done}"
+                (click)="setFilter(FilterEnum.Done)">Done</button>
+            <button [ngClass]="{'active': filter == FilterEnum.Undone}"
+                (click)="setFilter(FilterEnum.Undone)">Un-Done</button>
+        </div>
+        
+        <div class="add-item">
+            <input type="text" [(ngModel)]="itemName" (keydown.enter)="addItem()"/>
+            <button (click)="addItem()"
+                    [disabled]="!itemName">Add</button>
+        </div>
+        
+        <div class="statistics">
+            <span>items: {{getFilteredItems().length}}</span>
+        </div>
+        
         <div class="items">
-            {{items.length}}
-            <div class="item" *ngFor="let item of items">
-                {{item.text}}
+            <div class="item" *ngFor="let item of getFilteredItems()">
+                <input type="checkbox" [checked]="item.isDone"
+                    (click)="toggleItem(item)"/>
+                <a class="item-text" href="#/details"
+                    [class.done-item]="item.isDone" >
+                    {{item.text}}
+                </a>
+                <button class="item-del" (click)="deleteItem(item)">X</button>
             </div>
         </div>
     `
 })
 export class TodoList {
-    text:string = 'items';
-    items:any[];
+    items:TodoItem[] = [];
+    filteredItems:TodoItem[];
+    time:string;
+    itemName:string;
+    filter:FilterEnum = FilterEnum.All;
+    FilterEnum:any = FilterEnum;
 
-    constructor() {
-        this.items = [
-            {id: 1, text:'aaa'},
-            {id: 2, text:'sss'},
-            {id: 3, text:'ddd'}
-        ];
+    constructor(private todoService:TodoService) {
+    }
+
+    ngOnInit() {
+        this.items = this.todoService.getTodoItems();
+        setInterval(() => this.time = new Date().getTime().toString(), 1000)
+    }
+
+    addItem() {
+        if (this.itemName) {
+            this.items.push(new TodoItem(this.items.length, false, this.itemName, this.itemName, this.items.length * 10))
+            this.itemName = null;
+        }
+    }
+
+    deleteItem(item:TodoItem) {
+        this.items = this.items.filter(i => i !== item);
+    }
+
+    toggleItem(item:TodoItem) {
+        item.isDone = !item.isDone;
+    }
+
+    setFilter(filter) {
+        this.filter = filter;
+    }
+
+    getFilteredItems() {
+        return this.items
+            .filter(item =>
+            this.filter === FilterEnum.All
+            || item.isDone && this.filter === FilterEnum.Done
+            || !item.isDone && this.filter === FilterEnum.Undone);
     }
 }
