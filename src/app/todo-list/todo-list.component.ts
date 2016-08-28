@@ -1,22 +1,23 @@
 import {Component, ViewEncapsulation} from '@angular/core';
 import {TodoService, TodoItem} from './../services/todo.service';
 import {FilterEnum} from './filterEnum';
-import {ItemsListComponent} from './items-list/items-list.component';
-import {FiltersComponent} from './filters/filters.component';
 import {AddItemComponent} from './add-item/add-item.component';
+import {FiltersComponent} from './filters/filters.component';
+import {ItemsListComponent} from './items-list/items-list.component';
 
 @Component({
     selector: 'todo-list',
     styleUrls: [
         './todo-list.css'
     ],
-    encapsulation:ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.None,
     template: `
         <h1>Todo List</h1>
         
-        <div class="clock">Clock: {{time | date:'HH:mm:ss'}}</div>
+        <div class="clock">Clock: {{time}}</div>
         
-        <filters [filter]="filter" (change)="setFilter($event)">
+        <filters [filter]="filter"
+            (change)="setFilter($event)">
         </filters>
         
         <add-item [itemName]="itemName" (addItem)="addItem($event)">
@@ -27,11 +28,11 @@ import {AddItemComponent} from './add-item/add-item.component';
             (delete)="deleteItem($event)">    
         </items-list>
     `,
-    directives:[ItemsListComponent, FiltersComponent, AddItemComponent]
+    directives: [AddItemComponent, FiltersComponent, ItemsListComponent]
 })
 export class TodoList {
-    time:Date;
-    itemName:string = 'New Item';
+    time:string;
+    itemName:string = 'New';
     items:TodoItem[] = [];
     filter:FilterEnum = FilterEnum.All;
     FilterEnum:any = FilterEnum;
@@ -40,23 +41,38 @@ export class TodoList {
     }
 
     ngOnInit() {
-        this.items = this.todoService.getTodoItems();
+        this.todoService.getTodoItems()
+            .subscribe(res => {
+                this.items = res;
+            });
 
         setInterval(()=> {
-            this.time = new Date();
+            this.time = new Date().getSeconds().toString();
         }, 100);
     }
 
     addItem(name:string) {
-        this.items.push(new TodoItem(0, false, name, null, null));
+        var newItem = new TodoItem(null, false, name, null, null);
+
+        this.todoService.addItem(newItem)
+            .subscribe(item => {
+                this.items.push(item);
+                this.itemName = '';
+            });
     }
 
     deleteItem(delItem:TodoItem) {
-        this.items = this.items.filter(item => item !== delItem);
+        this.todoService.deleteItem(delItem)
+            .subscribe(res => {
+                this.items = this.items.filter(item => item !== delItem);
+            });
     }
 
     toggleItem(item:TodoItem) {
-        item.isDone = !item.isDone;
+        this.todoService.updateItem(Object.assign({}, item, {isDone: !item.isDone}))
+            .subscribe(res => {
+                item.isDone = !item.isDone;
+            });
     }
 
     setFilter(filter:FilterEnum) {
