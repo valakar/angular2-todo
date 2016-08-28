@@ -14,7 +14,7 @@ import {AddItemComponent} from './add-item/add-item.component';
     template: `
         <h1>Todo List</h1>
         
-        <div class="clock">Clock: {{time}}</div>
+        <div class="clock">Clock: {{time | date:'HH:mm:ss'}}</div>
         
         <filters [filter]="filter" (change)="setFilter($event)">
         </filters>
@@ -30,12 +30,12 @@ import {AddItemComponent} from './add-item/add-item.component';
     directives:[ItemsListComponent, FiltersComponent, AddItemComponent]
 })
 export class TodoList {
-    time:string;
+    time:Date;
     itemName:string = 'New Item';
     items:TodoItem[] = [];
     filter:FilterEnum = FilterEnum.All;
     FilterEnum:any = FilterEnum;
-    
+
     constructor(private todoService:TodoService) {
     }
 
@@ -43,7 +43,7 @@ export class TodoList {
         this.items = this.todoService.getTodoItems();
 
         setInterval(()=> {
-            this.time = new Date().getSeconds().toString();
+            this.time = new Date();
         }, 100);
     }
 
