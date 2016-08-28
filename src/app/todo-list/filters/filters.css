@@ -1,0 +1,11 @@
+.filters {
+	margin-bottom: 10px;
+}
+
+.filters button {
+	background: #aaaaaa;
+}
+
+.filters button.active {
+	background: #00b0e8;
+}

@@ -1,84 +1,73 @@
-import {Component} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 import {TodoService, TodoItem} from './../services/todo.service';
-import {FilterEnum} from './filter-enum';
-import {AddItemComponent} from './add-item';
+import {FilterEnum} from './filterEnum';
+import {ItemsListComponent} from './items-list/items-list.component';
+import {FiltersComponent} from './filters/filters.component';
+import {AddItemComponent} from './add-item/add-item.component';
 
 @Component({
     selector: 'todo-list',
     styleUrls: [
         './todo-list.css'
     ],
+    encapsulation:ViewEncapsulation.None,
     template: `
         <h1>Todo List</h1>
         
         <div class="clock">Clock: {{time}}</div>
         
-        <div class="filters">
-            <button [ngClass]="{'active': filter == FilterEnum.All}"
-                (click)="setFilter(FilterEnum.All)">All</button>
-            <button [ngClass]="{'active': filter == FilterEnum.Done}"
-                (click)="setFilter(FilterEnum.Done)">Done</button>
-            <button [ngClass]="{'active': filter == FilterEnum.Undone}"
-                (click)="setFilter(FilterEnum.Undone)">Un-Done</button>
-        </div>
+        <filters [filter]="filter" (change)="setFilter($event)">
+        </filters>
         
-        <add-item [itemName]="itemName" (addItem)="addItem($event)"></add-item>
+        <add-item [itemName]="itemName" (addItem)="addItem($event)">
+        </add-item>
         
-        <div class="statistics">
-            <span>items: {{getFilteredItems().length}}</span>
-        </div>
-        
-        <div class="items">
-            <div class="item" *ngFor="let item of getFilteredItems()">
-                <input type="checkbox" [checked]="item.isDone"
-                    (click)="toggleItem(item)"/>
-                <a class="item-text" href="#/details"
-                    [class.done-item]="item.isDone" >
-                    {{item.text}}
-                </a>
-                <button class="item-del" (click)="deleteItem(item)">X</button>
-            </div>
-        </div>
+        <items-list [items]="getFilteredItems()"
+            (toggle)="toggleItem($event)"
+            (delete)="deleteItem($event)">    
+        </items-list>
     `,
-    directives: [AddItemComponent]
+    directives:[ItemsListComponent, FiltersComponent, AddItemComponent]
 })
 export class TodoList {
-    items:TodoItem[] = [];
-    filteredItems:TodoItem[];
     time:string;
-    itemName:string = 'New Todo Item';
+    itemName:string = 'New Item';
+    items:TodoItem[] = [];
     filter:FilterEnum = FilterEnum.All;
     FilterEnum:any = FilterEnum;
-
+    
     constructor(private todoService:TodoService) {
     }
 
     ngOnInit() {
         this.items = this.todoService.getTodoItems();
-        setInterval(() => this.time = new Date().getTime().toString(), 1000)
+
+        setInterval(()=> {
+            this.time = new Date().getSeconds().toString();
+        }, 100);
     }
 
-    addItem(item) {
-        this.items.push(new TodoItem(this.items.length, false, item, item, this.items.length * 10))
+    addItem(name:string) {
+        this.items.push(new TodoItem(0, false, name, null, null));
     }
 
-    deleteItem(item:TodoItem) {
-        this.items = this.items.filter(i => i !== item);
+    deleteItem(delItem:TodoItem) {
+        this.items = this.items.filter(item => item !== delItem);
     }
 
     toggleItem(item:TodoItem) {
         item.isDone = !item.isDone;
     }
 
-    setFilter(filter) {
+    setFilter(filter:FilterEnum) {
         this.filter = filter;
     }
 
     getFilteredItems() {
-        return this.items
-            .filter(item =>
-            this.filter === FilterEnum.All
-            || item.isDone && this.filter === FilterEnum.Done
-            || !item.isDone && this.filter === FilterEnum.Undone);
+        return this.items.filter(item => {
+            return this.filter === FilterEnum.All
+                || item.isDone && this.filter === FilterEnum.Done
+                || !item.isDone && this.filter === FilterEnum.Undone;
+        });
     }
 }

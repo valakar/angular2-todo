@@ -1,0 +1,19 @@
+.item {
+	border: 1px solid #1c94c4;
+	border-radius: 5px;
+	padding: 5px;
+	margin-bottom: 10px;
+	display: flex;
+}
+
+.item-text {
+	flex: 1;
+}
+
+.item-del {
+	align-self: flex-end;
+}
+
+.done-item {
+	text-decoration: line-through;
+}
