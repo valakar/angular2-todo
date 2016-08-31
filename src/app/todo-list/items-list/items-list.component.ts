@@ -1,12 +1,13 @@
 import {Component, EventEmitter} from '@angular/core';
-import {TodoService, TodoItem} from './../../services/todo.service';
+import {TodoItem} from './../../services/todo.service';
 import {TodoItemComponent} from './todo-item/todo-item.component';
+import {LengthPipe} from './../../pipes/length.pipe';
 
 @Component({
     selector: 'items-list',
     template: `
        <div class="statistics">
-           <span>items: {{items.length}}</span>
+           <span>items: {{items | length}}</span>
        </div>
         
        <div class="items">
@@ -19,7 +20,8 @@ import {TodoItemComponent} from './todo-item/todo-item.component';
     `,
     inputs: ['items'],
     outputs: ['toggle', 'delete'],
-    directives:[TodoItemComponent]
+    directives:[TodoItemComponent],
+    pipes: [LengthPipe]
 })
 export class ItemsListComponent {
     items:TodoItem[];

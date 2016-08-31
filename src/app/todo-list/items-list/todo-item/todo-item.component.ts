@@ -12,7 +12,7 @@ import {TodoService,TodoItem} from './../../../services/todo.service';
                 [checked]="item.isDone"
                 [attr.data-id]="item.id" />
                 
-            <a class="item-text" href="#/details"
+            <a class="item-text" href="#/details/{{item.id}}"
                [class.done-item]="item.isDone">
                {{item.text}}
             </a>

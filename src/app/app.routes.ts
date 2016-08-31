@@ -9,7 +9,7 @@ export const routes:RouterConfig = [
         component: TodoList
     },
     {
-        path: 'details',
+        path: 'details/:id',
         component: TodoDetails
     }
 ];

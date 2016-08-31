@@ -10,11 +10,11 @@ import {ItemsListComponent} from './items-list/items-list.component';
     styleUrls: [
         './todo-list.css'
     ],
-    encapsulation: ViewEncapsulation.None,
+    encapsulation:ViewEncapsulation.None,
     template: `
         <h1>Todo List</h1>
-        
-        <div class="clock">Clock: {{time}}</div>
+        <!-- json date date:'hh:mm:ss' uppercase decimal currency -->
+        <div class="clock">Clock: {{time | date:'hh:mm:ss'}}</div>
         
         <filters [filter]="filter"
             (change)="setFilter($event)">
@@ -31,12 +31,12 @@ import {ItemsListComponent} from './items-list/items-list.component';
     directives: [AddItemComponent, FiltersComponent, ItemsListComponent]
 })
 export class TodoList {
-    time:string;
+    time:Date; // pipe
     itemName:string = 'New';
     items:TodoItem[] = [];
     filter:FilterEnum = FilterEnum.All;
     FilterEnum:any = FilterEnum;
-
+    
     constructor(private todoService:TodoService) {
     }
 
@@ -47,7 +47,7 @@ export class TodoList {
             });
 
         setInterval(()=> {
-            this.time = new Date().getSeconds().toString();
+            this.time = new Date(); // pipe
         }, 100);
     }
 
