@@ -7,3 +7,20 @@ textarea {
 	height: 50px;
 	width: 400px;
 }
+
+.ng-valid {
+	border-color: green;
+}
+
+.ng-invalid {
+	border-color: red;
+}
+
+.ng-dirty {
+	border-left: 10px solid darkgray;
+}
+
+.error {
+	background: red;
+	color:white;
+}

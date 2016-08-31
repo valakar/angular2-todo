@@ -1,0 +1,7 @@
+.error-summary {
+	border: 1px solid red;
+}
+
+.error-summary li {
+	text-transform: uppercase;
+}
