@@ -1,5 +1,5 @@
 import {Component, EventEmitter} from '@angular/core';
-import {TodoService,TodoItem} from './../../../services/todo.service';
+import {TodoService, TodoItem} from './../../../../services';
 
 @Component({
     selector: 'todo-item',

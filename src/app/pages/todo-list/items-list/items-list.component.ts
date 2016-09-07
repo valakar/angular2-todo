@@ -1,7 +1,7 @@
 import {Component, EventEmitter} from '@angular/core';
-import {TodoItem} from './../../services/todo.service';
+import {TodoService, TodoItem} from './../../../services';
 import {TodoItemComponent} from './todo-item/todo-item.component';
-import {LengthPipe} from './../../pipes/length.pipe';
+import {LengthPipe} from './../../../pipes/length.pipe';
 
 @Component({
     selector: 'items-list',

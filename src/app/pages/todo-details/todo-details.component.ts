@@ -1,20 +1,17 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormControl, Validators, FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {TodoService, TodoItem} from './../services/todo.service'
+import {TodoService, TodoItem} from './../../services';
 import {Subscription} from 'rxjs';
-import {notEqualValidator} from './../validators/notEqualValidator';
-import {ErrorSummaryComponent, SummaryError} from './../components/error-summary';
-
-@CompositionEvent({
-
-})
+import {notEqualValidator} from './../../validators/notEqualValidator';
+import {ErrorSummaryComponent, SummaryError} from './../../components/error-summary';
 
 @Component({
     selector: 'todo-details',
     styleUrls: [
         './todo-details.css'
     ],
+    directives: [ErrorSummaryComponent],
     template: `
         <h1>Todo Details</h1>
         
@@ -70,7 +67,7 @@ import {ErrorSummaryComponent, SummaryError} from './../components/error-summary
             <div class="form-control">
                 <label class="item-time">
                     Time:
-                    <input type="text" formControlName="time" />
+                    <input type="text" formControlName="time" only-numbers />
                     <div *ngIf="todoForm.controls.time.hasError('required')" class="error">
                         * required
                     </div>
@@ -81,8 +78,7 @@ import {ErrorSummaryComponent, SummaryError} from './../components/error-summary
             <button (click)="back($event)">Back To List</button>
         </form>
         
-    `,
-    directives: [ErrorSummaryComponent]
+    `
 })
 export class TodoDetails implements OnInit, OnDestroy {
     item:TodoItem;
@@ -138,7 +134,12 @@ export class TodoDetails implements OnInit, OnDestroy {
                 this.item.description,
                 [
                     Validators.required,
-                    notEqualValidator
+                    notEqualValidator(() => {
+                        var textControl = self.todoForm.controls['text'];
+                        if (textControl) {
+                            return textControl.value;
+                        }
+                    })
                 ],
             ],
             'time': [
@@ -162,21 +163,17 @@ export class TodoDetails implements OnInit, OnDestroy {
         $event.preventDefault();
     }
 
-    gotoList() {
-        this.router.navigate(['' /*, params */]);
-    }
-
     onSubmit() {
         console.log(this.todoForm);
 
         this.formErrors = [];
 
         if (this.todoForm.valid) {
-            var item = Object.assign({}, this.item, this.todoForm.value);
-            this.todoService.updateItem(item)
-                .subscribe(res => {
-                    this.gotoList();
-                });
+            Object.assign(this.item, this.todoForm.value);
+            // this.todoService.updateItem(this.item)
+            //     .subscribe(res => {
+            //         this.gotoList();
+            //     });
         }
         else {
             this.showErrorSummary();
@@ -195,5 +192,9 @@ export class TodoDetails implements OnInit, OnDestroy {
                 ));
             }
         }
+    }
+
+    gotoList() {
+        this.router.navigate(['' /*, params */]);
     }
 }

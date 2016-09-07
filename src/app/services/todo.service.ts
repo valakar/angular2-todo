@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers} from '@angular/http';
 import {Observable} from 'rxjs';
 import 'rxjs/add/operator/map';
+import {TodoItem} from './todoItem';
 
 @Injectable()
 export class TodoService {
@@ -57,14 +58,5 @@ export class TodoService {
 
     deleteItem(item:TodoItem) {
         return this.http.delete(this.apiUrl + item.id);
-    }
-}
-
-export class TodoItem {
-    constructor(public id:number,
-                public isDone:boolean,
-                public text:string,
-                public description:string,
-                public time:number) {
     }
 }

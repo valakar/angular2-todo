@@ -1,13 +1,19 @@
 import {FormControl} from '@angular/forms';
 
-export function notEqualValidator(ctrl:FormControl) {
-    if (ctrl.value === 'abc') {
-        return {
-            notEqual: {
-                abc: false
-            }
-        };
-    }
+export function notEqualValidator(getValueToCheck:()=>any) {
 
-    return null;
+    // Validator
+    return function (ctrl:FormControl) {
+        var valueThatShouldNotBeEqual = getValueToCheck();
+
+        if(valueThatShouldNotBeEqual === ctrl.value) {
+            return {
+                notEqual: {
+                    valid: false
+                }
+            }
+        }
+
+        return null;
+    }
 }

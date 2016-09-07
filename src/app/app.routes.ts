@@ -1,7 +1,7 @@
 import {WebpackAsyncRoute} from '@angularclass/webpack-toolkit';
 import {RouterConfig} from '@angular/router';
-import {TodoList} from './todo-list';
-import {TodoDetails} from './todo-details';
+import {TodoList} from './pages/todo-list';
+import {TodoDetails} from './pages/todo-details';
 
 export const routes:RouterConfig = [
     {

@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {SummaryError} from './summary-error';
+import {Component} from "@angular/core";
+import {SummaryError} from "./summary-error";
 
 @Component({
     selector: 'error-summary',

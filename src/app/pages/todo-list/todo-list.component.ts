@@ -1,5 +1,5 @@
 import {Component, ViewEncapsulation} from '@angular/core';
-import {TodoService, TodoItem} from './../services/todo.service';
+import {TodoService, TodoItem} from './../../services';
 import {FilterEnum} from './filterEnum';
 import {AddItemComponent} from './add-item/add-item.component';
 import {FiltersComponent} from './filters/filters.component';
