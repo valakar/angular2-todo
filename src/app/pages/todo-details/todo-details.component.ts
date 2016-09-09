@@ -170,10 +170,10 @@ export class TodoDetails implements OnInit, OnDestroy {
 
         if (this.todoForm.valid) {
             Object.assign(this.item, this.todoForm.value);
-            // this.todoService.updateItem(this.item)
-            //     .subscribe(res => {
-            //         this.gotoList();
-            //     });
+            this.todoService.updateItem(this.item)
+                .subscribe(res => {
+                    this.gotoList();
+                });
         }
         else {
             this.showErrorSummary();

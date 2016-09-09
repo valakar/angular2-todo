@@ -36,7 +36,7 @@ export class TodoList {
     items:TodoItem[] = [];
     filter:FilterEnum = FilterEnum.All;
     FilterEnum:any = FilterEnum;
-    
+
     constructor(private todoService:TodoService) {
     }
 
