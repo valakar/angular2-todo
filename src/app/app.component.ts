@@ -25,10 +25,5 @@ import {TodoService} from './services/todo.service';
     ]
 })
 export class App {
-    constructor() {
-    }
-
-    ngOnInit() {
-    }
 }
 

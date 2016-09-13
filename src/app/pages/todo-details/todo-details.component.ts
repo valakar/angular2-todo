@@ -6,6 +6,8 @@ import {notEqualValidator} from './../../validators/notEqualValidator';
 import {ErrorSummaryComponent, SummaryError} from './../../components/error-summary';
 import {Store, Action, combineReducers} from '@ngrx/store';
 import {Observable, Subscription} from 'rxjs';
+import {PageComponent} from '../../components/page.component';
+import {todoDetailsReducers} from './todo-details.reducers';
 
 @Component({
     selector: 'todo-details',
@@ -81,65 +83,45 @@ import {Observable, Subscription} from 'rxjs';
         
     `
 })
-export class TodoDetails implements OnInit, OnDestroy {
+export class TodoDetails extends PageComponent {
     item:TodoItem;
-    sub:Subscription;
     todoForm:FormGroup;
     formErrors:any;
-    subscriptions:Subscription[] = [];
 
     constructor(private todoService:TodoService,
                 private activatedRoute:ActivatedRoute,
                 private router:Router,
                 private fb:FormBuilder,
                 private store:Store<any>) {
+        super(store, todoDetailsReducers)
     }
 
-    ngOnInit() {
-        this.initReducers();
+    onInit() {
+        this.todoForm = this.fb.group({});
 
-        this.subscriptions.push(
+        this._subscriptions([
             this.activatedRoute.params
                 .subscribe(params => {
                     let itemId = +params['id'];
-                    this.todoService.getItem(itemId)
-                })
-        );
+                    this.todoService.getItem(itemId);
+                }),
 
-        this.subscriptions.push(
             this.store.select('item')
                 .subscribe((item:TodoItem) => {
-                    this.item = item;
-                    // Form data and validation
-                    this.initializeForm();
+                    if (item) {
+                        this.item = item;
+                        // Form data and validation
+                        this.initializeForm();
+                    }
                 })
-        );
+        ]);
     }
 
-    ngOnDestroy () {
-        this.subscriptions.forEach(s => s.unsubscribe());
-    }
-
-
-    initReducers() {
-        this.store.replaceReducer(combineReducers({
-            item: function(state, action) {
-                switch (action.type) {
-                    case 'ITEM_LOADED':
-                        return action.payload;
-                    default: return state;
-                }
-            }
-        }));
+    onDestroy() {
     }
 
     initializeForm() {
         var self = this;
-
-        if(!this.item) {
-            this.todoForm = this.fb.group({});
-            return;
-        }
 
         this.todoForm = this.fb.group({
             'id': [
@@ -195,10 +177,10 @@ export class TodoDetails implements OnInit, OnDestroy {
         this.formErrors = [];
 
         if (this.todoForm.valid) {
-            let updatedItem = Object.assign({}, this.item, this.todoForm.value);
-            
-            this.subscriptions.push(
-                this.todoService.updateItem(updatedItem)
+            Object.assign(this.item, this.todoForm.value);
+
+            this._subscription(
+                this.todoService.updateItem(this.item)
                     .subscribe(res => {
                         this.gotoList();
                     })
