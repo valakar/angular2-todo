@@ -1,3 +1,26 @@
 .login-page .some-class {}
 .login-page .some-class1 {}
 .login-page .some-class2 {}
+
+/*
+SCSS/LESS/...
+
+.login-page {
+
+    .some-class {}
+    .some-class1 {}
+    .some-class2 {}
+
+}
+
+BEM
+
+.login-page {
+
+    &__some-class {}
+    &__some-class1 {}
+    &__some-class2 {}
+
+}
+
+*/

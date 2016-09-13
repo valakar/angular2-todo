@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 import {TodoService, TodoItem} from './../../../../services';
 
 @Component({
@@ -21,7 +21,8 @@ import {TodoService, TodoItem} from './../../../../services';
         </div>
     `,
     inputs: ['item'],
-    outputs: ['toggle', 'delete']
+    outputs: ['toggle', 'delete'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodoItemComponent {
     item:TodoItem;

@@ -1,10 +1,13 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import 'rxjs/add/operator/map';
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
+import "rxjs/add/operator/map";
 
 @Injectable()
 export class AuthService {
     static LOGIN_KEY:string = 'login';
+
+    constructor() {
+    }
 
     logIn(login:string):Observable<boolean> {
         return Observable.create(observer => {
@@ -15,7 +18,7 @@ export class AuthService {
                     localStorage.setItem(AuthService.LOGIN_KEY, login);
                 }
                 observer.next(result);
-            }, 1000);
+            }, 500);
 
         });
     }

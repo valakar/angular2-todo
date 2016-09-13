@@ -1,17 +1,18 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {Router} from '@angular/router';
-import {AuthService} from './../../services';
+import {Component, ViewEncapsulation} from "@angular/core";
+import {Router} from "@angular/router";
+import {AuthService} from "./../../services";
 
 @Component({
     selector: 'login-page',
     styleUrls: ['./login.css'],
-    templateUrl: './login.html'
+    templateUrl: './login.html',
+    encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent {
-    login:string = '';
+    login: string = '';
 
-    constructor(private authService:AuthService,
-                private router:Router) {
+    constructor(private authService: AuthService,
+                private router: Router) {
     }
 
     logIn() {

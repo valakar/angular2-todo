@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
     selector: 'add-item',
@@ -7,7 +7,8 @@ import {Component, EventEmitter} from '@angular/core';
     ],
     templateUrl: './add-item.html',
     inputs: ['itemName'],
-    outputs: ['addItem']
+    outputs: ['addItem'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddItemComponent {
     itemName:string;

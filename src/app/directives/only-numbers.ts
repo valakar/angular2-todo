@@ -18,7 +18,7 @@ export class OnlyNumbersDirective implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        //this.el.nativeElement.addEventListener('keypress', this.onKeyPress);
+        //this.el.nativeElement.removeEventListener('keypress', this.onKeyPress);
     }
 
     ngOnDestroy() {

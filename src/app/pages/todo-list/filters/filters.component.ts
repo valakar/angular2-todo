@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 import {FilterEnum} from "./../filterEnum";
 
 @Component({
@@ -26,6 +26,7 @@ import {FilterEnum} from "./../filterEnum";
     `,
     inputs: ['filter'],
     outputs: ['change'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FiltersComponent {
     filter:FilterEnum;

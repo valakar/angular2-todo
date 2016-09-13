@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 import {TodoService, TodoItem} from './../../../services';
 import {TodoItemComponent} from './todo-item/todo-item.component';
 import {LengthPipe} from './../../../pipes/length.pipe';
@@ -21,7 +21,8 @@ import {LengthPipe} from './../../../pipes/length.pipe';
     inputs: ['items'],
     outputs: ['toggle', 'delete'],
     directives:[TodoItemComponent],
-    pipes: [LengthPipe]
+    pipes: [LengthPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemsListComponent {
     items:TodoItem[];
